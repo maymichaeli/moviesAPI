@@ -1,0 +1,9 @@
+.cards-container{
+    display: flex;
+    flex-wrap: wrap; /* מאפשר לשבור שורות */
+    justify-content: center; /* ממרכז את הכרטיסים */
+    gap: 2rem; /* יוצר ריווח בין הכרטיסים */
+    padding: 2rem;
+    margin: 1rem;
+
+}
