@@ -1,33 +1,37 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
+import { Header } from './components/Header.jsx'
+import { Search } from './components/Search.jsx'
+import { Cards } from './components/Cards.jsx'
+import { Card } from './components/Card.jsx'
+const API_URL ="http://localhost:3000/api/movies";
 
-function App() {
-  const [count, setCount] = useState(0)
+function App() { 
+  const [movies , setMovies] = useState([]);
+  const [searchMovie, setSearchMovie]= useState("");
+
+  useEffect(()=>{
+    fetch(API_URL)
+    .then(response =>response.json())
+    .then(data=> {
+      console.log(data)
+      setMovies(data.results)
+    })
+    .catch(error=> console.error("Error fatching movies:", error))
+  }, []);
+
+  const filteredMovies = searchMovie
+  ? movies.filter(movie => 
+      movie.title && movie.title.toLowerCase().includes(searchMovie.toLowerCase())
+    )
+  : movies;
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+    <Header/>
+    <Search searchMovie={searchMovie} setSearchMovie={setSearchMovie}/>
+    <Cards movies={filteredMovies} />
+    <Card></Card>
     </>
   )
 }
